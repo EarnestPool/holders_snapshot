@@ -82,8 +82,7 @@ class CozyAnalytics:
 			attempts = 0
 			if i == total_pages:
 				lower = (i-1) * 100
-				upper = -1
-
+				upper = len(asset_ids_list)
 			else:
 				lower = (i-1) * 100
 				upper = i*100
@@ -91,25 +90,14 @@ class CozyAnalytics:
 
 			while not successful and attempts <= 5:
 				try:
-					upper_success = upper
-					if upper == -1:
-						upper_success = len(asset_ids_list) - 1
-					print(f'Collecting data on holders of assets in the range {lower} - {upper_success}')
+					print(f'Collecting data on holders of assets in the range {lower} - {upper}')
 					temp_dict = self.get_asset_ownership_dict(asset_ids_list[lower:upper])
 					ownership_dict.update(temp_dict)
 					successful = True
 				except:
 					attempts += 1
-					upper_error = upper
-					if upper == -1:
-						upper_error = len(asset_ids_list) - 1
-					print(f'Something went wrong when tried to get info on owners for assets in range {lower} - {upper_error}')
+					print(f'Something went wrong when tried to get info on owners for assets in range {lower} - {upper}')
 					if attempts <= 5:
 						print(f'Trying again...\nAttempt {attempts}')
 					successful = False
 		return ownership_dict
-
-			
-
-
-
